@@ -1,9 +1,11 @@
 import express from 'express';
+import cors from 'cors';
 
 const SERVER_PORT = 3000;
 
 const app = express();
 app.use(express.json());
+app.use(cors());
 
 // DATABASE
 const database = {
@@ -68,7 +70,7 @@ app.get('/profile/:id', (req, res) => {
   }
 });
 
-app.put('/image' , (req,res) =>{
+app.put('/image', (req, res) => {
   const { id } = req.body;
   let found = false;
   database.users.forEach((user) => {
