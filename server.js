@@ -1,6 +1,21 @@
 import express from 'express';
 import bcrypt from 'bcryptjs';
 import cors from 'cors';
+import knex from 'knex';
+
+const database=knex({
+  client: 'pg',
+  connection: {
+    host : '127.0.0.1',
+    user : 'postgres',
+    password : '',
+    database : 'face_recognition'
+  }
+});
+
+// Test Connection
+console.log(database.select('*').from('users'));
+
 
 const SERVER_PORT = 3000;
 
@@ -9,26 +24,26 @@ app.use(express.json());
 app.use(cors());
 
 // DATABASE
-const database = {
-  users: [
-    {
-      id: '123',
-      name: 'John',
-      email: 'john@gmail.com',
-      password: 'cookies',
-      entries: 0,
-      joined: new Date(),
-    },
-    {
-      id: '124',
-      name: 'Sally',
-      email: 'sally@gmail.com',
-      password: 'bananas',
-      entries: 0,
-      joined: new Date(),
-    }
-  ]
-};
+// const database = {
+//   users: [
+//     {
+//       id: '123',
+//       name: 'John',
+//       email: 'john@gmail.com',
+//       password: 'cookies',
+//       entries: 0,
+//       joined: new Date(),
+//     },
+//     {
+//       id: '124',
+//       name: 'Sally',
+//       email: 'sally@gmail.com',
+//       password: 'bananas',
+//       entries: 0,
+//       joined: new Date(),
+//     }
+//   ]
+// };
 
 // ROUTES
 app.get('/', (req,res) => {
