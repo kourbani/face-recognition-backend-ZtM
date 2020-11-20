@@ -1,4 +1,4 @@
-const updateEntries = (req,res,db) => {
+const updateEntries = (db) => (req,res) => {
   const { id } = req.body;
   db('users')
     .where({ id: id })

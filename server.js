@@ -27,21 +27,13 @@ app.use(cors());
 
 
 // ROUTES
-app.post('/signin', (req,res) => {
-  handleSignIn(req,res,db,bcrypt);
-});
+app.post('/signin', handleSignIn(db,bcrypt));
 
-app.post('/register' , (req,res) => {
-  handleRegister(req,res,db,bcrypt);
-});
+app.post('/register' , handleRegister(db,bcrypt));
 
-app.get('/profile/:id', (req, res) => {
-  viewProfile(req,res,db);
-});
+app.get('/profile/:id', viewProfile(db));
 
-app.put('/image', (req, res) => {
-  updateEntries(req,res,db);
-});
+app.put('/image', updateEntries(db));
 
 app.listen(SERVER_PORT, ()=>{
   console.log('app running on port ' + SERVER_PORT)

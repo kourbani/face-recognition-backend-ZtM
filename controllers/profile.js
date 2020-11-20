@@ -1,4 +1,4 @@
-const viewProfile = (req,res,db) => {
+const viewProfile = (db) => (req,res) => {
   const { id } = req.params;
   db.select('*').from('users').where({
     id: id
