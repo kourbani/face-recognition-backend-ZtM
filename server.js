@@ -2,8 +2,9 @@ import express from 'express';
 import bcrypt from 'bcryptjs';
 import cors from 'cors';
 import knex from 'knex';
+import e from 'express';
 
-const database=knex({
+const db=knex({
   client: 'pg',
   connection: {
     host : '127.0.0.1',
@@ -13,10 +14,6 @@ const database=knex({
   }
 });
 
-// Test Connection
-console.log(database.select('*').from('users'));
-
-
 const SERVER_PORT = 3000;
 
 const app = express();
@@ -24,26 +21,26 @@ app.use(express.json());
 app.use(cors());
 
 // DATABASE
-// const database = {
-//   users: [
-//     {
-//       id: '123',
-//       name: 'John',
-//       email: 'john@gmail.com',
-//       password: 'cookies',
-//       entries: 0,
-//       joined: new Date(),
-//     },
-//     {
-//       id: '124',
-//       name: 'Sally',
-//       email: 'sally@gmail.com',
-//       password: 'bananas',
-//       entries: 0,
-//       joined: new Date(),
-//     }
-//   ]
-// };
+const database = {
+  users: [
+    {
+      id: '123',
+      name: 'John',
+      email: 'john@gmail.com',
+      password: 'cookies',
+      entries: 0,
+      joined: new Date(),
+    },
+    {
+      id: '124',
+      name: 'Sally',
+      email: 'sally@gmail.com',
+      password: 'bananas',
+      entries: 0,
+      joined: new Date(),
+    }
+  ]
+};
 
 // ROUTES
 app.get('/', (req,res) => {
@@ -61,29 +58,33 @@ app.post('/signin', (req,res) => {
 
 app.post('/register' , (req,res) => {
  const {name,email,password} = req.body;
- database.users.push({
-   id: '125',
+ db('users')
+ .returning('*')
+ .insert({
    name: name,
    email: email,
-   password: password,
-   entries: 0,
    joined: new Date()
- });
- res.json(database.users[database.users.length-1]);
+ }).then(user => {
+    res.json(user[0]);
+ })
+ .catch(err => res.status(400).json('unable to register'));
 });
 
 app.get('/profile/:id', (req, res) => {
   const { id } = req.params;
-  let found = false;
-  database.users.forEach((user) => {
-    if (user.id === id) {
-      found = true;
-      return res.json(user);
-    }
-  });
-  if (!found) {
-    res.status(400).json('not found');
-  }
+  db.select('*')
+    .from('users')
+    .where({
+      id: id,
+    })
+    .then((user) => {
+      if (user.length) {
+        res.json(user[0]);
+      } else {
+        res.status(400).json('not found');
+      }
+    })
+    .catch((err) => res.status(400).json('error getting user'));
 });
 
 app.put('/image', (req, res) => {
