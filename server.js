@@ -2,7 +2,6 @@ import express from 'express';
 import bcrypt from 'bcryptjs';
 import cors from 'cors';
 import knex from 'knex';
-import e from 'express';
 
 const db=knex({
   client: 'pg',
@@ -72,19 +71,17 @@ app.post('/register' , (req,res) => {
 
 app.get('/profile/:id', (req, res) => {
   const { id } = req.params;
-  db.select('*')
-    .from('users')
-    .where({
-      id: id,
-    })
-    .then((user) => {
-      if (user.length) {
-        res.json(user[0]);
-      } else {
-        res.status(400).json('not found');
-      }
-    })
-    .catch((err) => res.status(400).json('error getting user'));
+  db.select('*').from('users').where({
+    id: id
+  })
+  .then(user => {
+    if(user.length) {
+      res.json(user[0]);
+    } else {
+      res.json('Not found');
+    }
+  })
+  .catch(err=>res.status(400).json('error getting user'));
 });
 
 app.put('/image', (req, res) => {
