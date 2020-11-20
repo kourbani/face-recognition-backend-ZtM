@@ -1,4 +1,5 @@
 import express from 'express';
+import bcrypt from 'bcryptjs';
 import cors from 'cors';
 
 const SERVER_PORT = 3000;
