@@ -5,7 +5,7 @@ import knex from 'knex';
 // Controllers
 import {handleRegister} from './controllers/register.js';
 import {handleSignIn} from './controllers/signin.js';
-import {updateEntries} from './controllers/entries.js';
+import {handleApiCall, updateEntries} from './controllers/entries.js';
 import {viewProfile} from './controllers/profile.js';
 
 // Connect Database
@@ -34,6 +34,7 @@ app.post('/register' , handleRegister(db,bcrypt));
 app.get('/profile/:id', viewProfile(db));
 
 app.put('/image', updateEntries(db));
+app.post('/imageurl', handleApiCall);
 
 app.listen(SERVER_PORT, ()=>{
   console.log('app running on port ' + SERVER_PORT)
